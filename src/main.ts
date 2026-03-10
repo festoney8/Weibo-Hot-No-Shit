@@ -1,11 +1,31 @@
 import { createApp } from 'vue'
-import './style.css'
+import { waitForBody, waitForHead } from './utils/init'
 import App from './App.vue'
 
-createApp(App).mount(
-  (() => {
-    const app = document.createElement('div')
-    document.body.append(app)
-    return app
-  })(),
-)
+const main = async () => {
+  // 1. 立即开始获取数据
+  // Todo: fetchData
+
+  // 2. 等待head出现，注入css
+  waitForHead().then(() => {
+    const style = document.createElement('style')
+    style.textContent = `...`
+    document.documentElement.appendChild(style)
+  })
+
+  // 3. 等待body出现，mount app
+  waitForBody().then(() => {
+    createApp(App).mount(
+      (() => {
+        const app = document.createElement('div')
+        document.body.append(app)
+        return app
+      })(),
+    )
+  })
+
+  // 4. 注册油猴菜单
+  // Todo: registerMenu
+}
+
+main()
