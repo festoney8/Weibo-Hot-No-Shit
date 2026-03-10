@@ -9,13 +9,23 @@ export default defineConfig({
     monkey({
       entry: 'src/main.ts',
       userscript: {
-        icon: 'https://vitejs.dev/logo.svg',
-        namespace: 'npm/vite-plugin-monkey',
-        match: ['https://www.google.com/'],
+        name: 'Weibo-Hot-No-Shit',
+        namespace: 'http://tampermonkey.net/',
+        version: '0.1.0',
+        description: 'Remove shit from weibo hotsearch sidebar',
+        author: 'festoney8',
+        homepage: 'https://github.com/festoney8/Weibo-Hot-No-Shit',
+        supportURL: 'https://github.com/festoney8/Weibo-Hot-No-Shit',
+        license: 'MIT',
+        icon: 'https://weibo.com/favicon.ico',
+        match: ['*://weibo.com/', '*://s.weibo.com/*'],
+        'run-at': 'document-start',
+        downloadURL: '',
+        updateURL: '',
       },
       build: {
         externalGlobals: {
-          vue: cdn.jsdelivr('Vue', 'dist/vue.global.prod.js'),
+          vue: cdn.npmmirror('Vue', 'dist/vue.global.prod.js'),
         },
       },
     }),
