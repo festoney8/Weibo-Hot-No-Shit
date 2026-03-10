@@ -10,10 +10,14 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.2.1",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1",
     "vue": "^3.5.19"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@thedutchcoder/postcss-rem-to-px": "^0.0.2",
     "@vitejs/plugin-vue": "^6.0.1",
     "eslint": "^10.0.3",
     "eslint-plugin-vue": "^10.8.0",
