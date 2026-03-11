@@ -12,6 +12,7 @@
   "dependencies": {
     "@pinia/colada": "^1.0.0",
     "@tailwindcss/postcss": "^4.2.1",
+    "@vueuse/core": "^14.2.1",
     "axios": "^1.13.6",
     "pinia": "^3.0.4",
     "postcss": "^8.5.8",
@@ -22,6 +23,7 @@
     "@biomejs/biome": "2.4.6",
     "@eslint/js": "^10.0.1",
     "@thedutchcoder/postcss-rem-to-px": "^0.0.2",
+    "@types/node": "^25.4.0",
     "@vitejs/plugin-vue": "^6.0.1",
     "eslint": "^10.0.3",
     "eslint-plugin-vue": "^10.8.0",
