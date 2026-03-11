@@ -1,5 +1,6 @@
 import { MineHeaders, MineResponse } from '@/types/api'
 import { hotApiClient } from './client'
+import { assertSuccessPayload } from './guards'
 
 const MINE_BAND_PATH = '/ajax/statuses/mineBand' as const
 
@@ -9,6 +10,5 @@ export const fetchMine = async (headers?: MineHeaders) => {
       ...(headers ?? {}),
     },
   })
-
-  return response.data
+  return assertSuccessPayload<MineResponse>(response.data, MINE_BAND_PATH)
 }

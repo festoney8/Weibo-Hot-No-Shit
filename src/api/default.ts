@@ -1,5 +1,6 @@
 import { DefaultHeaders, DefaultResponse } from '@/types/api'
 import { hotApiClient } from './client'
+import { assertSuccessPayload } from './guards'
 const DEFAULT_HOT_SEARCH_PATH = '/ajax/side/hotSearch' as const
 
 export const fetchDefault = async (headers?: DefaultHeaders) => {
@@ -8,6 +9,5 @@ export const fetchDefault = async (headers?: DefaultHeaders) => {
       ...(headers ?? {}),
     },
   })
-
-  return response.data
+  return assertSuccessPayload<DefaultResponse>(response.data, DEFAULT_HOT_SEARCH_PATH)
 }

@@ -1,5 +1,6 @@
 import { LifeHeaders, LifeResponse } from '@/types/api'
 import { hotApiClient } from './client'
+import { assertSuccessPayload } from './guards'
 
 const LIFE_HOT_PATH = '/ajax/statuses/life' as const
 
@@ -9,6 +10,5 @@ export const fetchLife = async (headers?: LifeHeaders) => {
       ...(headers ?? {}),
     },
   })
-
-  return response.data
+  return assertSuccessPayload<LifeResponse>(response.data, LIFE_HOT_PATH)
 }

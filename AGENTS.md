@@ -14,7 +14,7 @@
 ## 2. 当前技术栈
 
 - Vue 3 + TypeScript + Vueuse
-- Pinia + @pinia/colada
+- Pinia
 - Axios
 - Tailwind CSS
 - openapi-typescript
