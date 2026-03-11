@@ -6,6 +6,7 @@ import { fetchDefault, fetchEntmt, fetchLife, fetchMine, fetchSocial } from '@/a
 import { ApiResponseError } from '@/api/guards'
 import type { DefaultResponse, EntmtResponse, LifeResponse, MineResponse, SocialResponse } from '@/types/api'
 import { logger } from '@/utils/logger'
+import { updateEntmtWordHistory, updateLifeWordHistory } from './history'
 
 const RAW_TTL_MS = 3 * 60 * 1000 // TTL 3 minutes
 
@@ -28,6 +29,7 @@ type CreateRawStoreOptions<T> = {
   sourceLabel: string
   fetcher: () => Promise<T>
   unknownErrorMessage: string
+  onSuccess?: (response: T) => void
 }
 
 const createInitialState = <T>() => {
@@ -56,6 +58,7 @@ const createRawStore = <T>(options: CreateRawStoreOptions<T>) => {
           data: response,
           updatedAt: Date.now(),
         }
+        options.onSuccess?.(response)
         return response
       } catch (cause) {
         const currentError = cause instanceof Error ? cause : new Error(options.unknownErrorMessage)
@@ -112,6 +115,7 @@ export const useEntmtRawStore = createRawStore<EntmtResponse>({
   sourceLabel: 'Entertainment',
   fetcher: fetchEntmt,
   unknownErrorMessage: 'Unknown error while fetching entertainment hot list',
+  onSuccess: updateEntmtWordHistory,
 })
 
 export const useLifeRawStore = createRawStore<LifeResponse>({
@@ -120,6 +124,7 @@ export const useLifeRawStore = createRawStore<LifeResponse>({
   sourceLabel: 'Life',
   fetcher: fetchLife,
   unknownErrorMessage: 'Unknown error while fetching life hot list',
+  onSuccess: updateLifeWordHistory,
 })
 
 export const useSocialRawStore = createRawStore<SocialResponse>({
