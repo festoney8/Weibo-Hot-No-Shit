@@ -19,10 +19,16 @@ export default defineConfig({
         supportURL: 'https://github.com/festoney8/Weibo-Hot-No-Shit',
         license: 'MIT',
         icon: 'https://weibo.com/favicon.ico',
-        match: ['*://weibo.com/', '*://s.weibo.com/*'],
-        'run-at': 'document-start',
+        match: ['*://weibo.com/*', '*://s.weibo.com/*'],
+        exclude: [
+          // '*://weibo.com/u/*',
+          '*://weibo.com/ttarticle/*',
+          '*://weibo.com/tv/*',
+          '*://weibo.com/aj/*',
+        ],
         downloadURL: '',
         updateURL: '',
+        'run-at': 'document-start',
       },
       build: {
         externalGlobals: {

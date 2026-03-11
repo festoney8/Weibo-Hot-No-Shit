@@ -1,0 +1,10 @@
+// 隐藏 weibo.com 热搜侧边栏
+#__sidebar,
+.wbpro-side-main {
+  display: none !important;
+}
+
+// 隐藏 s.weibo.com 侧边栏
+#main-side {
+  display: none !important;
+}
