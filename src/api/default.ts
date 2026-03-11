@@ -1,0 +1,13 @@
+import { DefaultHeaders, DefaultResponse } from '@/types/api'
+import { hotApiClient } from './client'
+const DEFAULT_HOT_SEARCH_PATH = '/ajax/side/hotSearch' as const
+
+export const fetchDefault = async (headers?: DefaultHeaders) => {
+  const response = await hotApiClient.get<DefaultResponse>(DEFAULT_HOT_SEARCH_PATH, {
+    headers: {
+      ...(headers ?? {}),
+    },
+  })
+
+  return response.data
+}
