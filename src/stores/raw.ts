@@ -47,6 +47,7 @@ const createRawStore = <T>(options: CreateRawStoreOptions<T>) => {
 
     const ensureFresh = async (force = false) => {
       if (!force && state.value.data && Date.now() - state.value.updatedAt < RAW_TTL_MS) {
+        logger.info(`${options.sourceLabel} API cache hit. Returning cached data.`)
         return state.value.data
       }
 
@@ -78,6 +79,7 @@ const createRawStore = <T>(options: CreateRawStoreOptions<T>) => {
         throw currentError
       } finally {
         loading.value = false
+        logger.info(`${options.sourceLabel} API fetch finished. Success: ${!error.value}, Force: ${force}`)
       }
     }
 

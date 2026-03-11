@@ -2,7 +2,7 @@ import { useStorage } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import type { EntmtResponse, LifeResponse } from '@/types/api'
 
-const WORD_HISTORY_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000
+const WORD_HISTORY_MAX_AGE_MS = 3 * 86400 * 1000
 
 type WordTimestampMap = Record<string, number>
 
@@ -36,10 +36,19 @@ const createWordHistoryStore = (id: string, storageKey: string) => {
       pruneExpired(now)
     }
 
+    const hasWord = (word: string) => {
+      const normalizedWord = word.trim()
+      if (!normalizedWord) {
+        return false
+      }
+      return typeof wordMap.value[normalizedWord] === 'number'
+    }
+
     return {
       wordMap,
       pruneExpired,
       touchWords,
+      hasWord,
     }
   })
 }
