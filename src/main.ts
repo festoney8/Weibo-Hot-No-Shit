@@ -3,6 +3,7 @@ import { createPinia } from 'pinia'
 import { waitForBody, waitForHead } from './utils/init'
 import App from './App.vue'
 import { ensureAllRawStoresFresh } from './stores/raw'
+import { logger } from './utils/logger'
 
 const main = async () => {
   // 1. 立即开始获取数据
@@ -33,4 +34,6 @@ const main = async () => {
   // Todo: registerMenu
 }
 
-main()
+main().catch((e) => {
+  logger.error('Error in main:', e)
+})
