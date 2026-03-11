@@ -1,6 +1,6 @@
-import { LifeHeaders, LifeResponse } from '@/types/api'
-import { hotApiClient } from './client'
-import { assertSuccessPayload } from './guards'
+import { LifeHeaders, LifeResponse } from '@/types/api.ts'
+import { hotApiClient } from '../client.ts'
+import { assertSuccessPayload } from '../guards.ts'
 
 const LIFE_HOT_PATH = '/ajax/statuses/life' as const
 

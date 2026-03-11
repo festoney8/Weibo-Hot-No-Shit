@@ -1,6 +1,6 @@
-import { EntmtHeaders, EntmtResponse } from '@/types/api'
-import { hotApiClient } from './client'
-import { assertSuccessPayload } from './guards'
+import { EntmtHeaders, EntmtResponse } from '@/types/api.ts'
+import { hotApiClient } from '../client.ts'
+import { assertSuccessPayload } from '../guards.ts'
 
 const ENTERTAINMENT_HOT_PATH = '/ajax/statuses/entertainment' as const
 

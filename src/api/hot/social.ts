@@ -1,6 +1,6 @@
-import { SocialHeaders, SocialResponse } from '@/types/api'
-import { hotApiClient } from './client'
-import { assertSuccessPayload } from './guards'
+import { SocialHeaders, SocialResponse } from '@/types/api.ts'
+import { hotApiClient } from '../client.ts'
+import { assertSuccessPayload } from '../guards.ts'
 
 const SOCIAL_HOT_PATH = '/ajax/statuses/social' as const
 

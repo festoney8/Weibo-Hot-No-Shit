@@ -1,6 +1,6 @@
-import { MineHeaders, MineResponse } from '@/types/api'
-import { hotApiClient } from './client'
-import { assertSuccessPayload } from './guards'
+import { MineHeaders, MineResponse } from '@/types/api.ts'
+import { hotApiClient } from '../client.ts'
+import { assertSuccessPayload } from '../guards.ts'
 
 const MINE_BAND_PATH = '/ajax/statuses/mineBand' as const
 

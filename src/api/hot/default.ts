@@ -1,6 +1,6 @@
-import { DefaultHeaders, DefaultResponse } from '@/types/api'
-import { hotApiClient } from './client'
-import { assertSuccessPayload } from './guards'
+import { DefaultHeaders, DefaultResponse } from '@/types/api.ts'
+import { hotApiClient } from '../client.ts'
+import { assertSuccessPayload } from '../guards.ts'
 const DEFAULT_HOT_SEARCH_PATH = '/ajax/side/hotSearch' as const
 
 export const fetchDefault = async (headers?: DefaultHeaders) => {
