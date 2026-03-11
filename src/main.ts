@@ -1,5 +1,3 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import { waitForBody, waitForHead } from './utils/init'
 import App from './App.vue'
 import { ensureAllRawStoresFresh } from './stores/raw'

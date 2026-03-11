@@ -1,6 +1,5 @@
-import { defineStore } from 'pinia'
 import type { Pinia } from 'pinia'
-import { ref } from 'vue'
+import type { Ref } from 'vue'
 import { useStorage } from '@vueuse/core'
 import { fetchDefault, fetchEntmt, fetchLife, fetchMine, fetchSocial } from '@/api'
 import { ApiResponseError } from '@/api/guards'
@@ -16,9 +15,9 @@ type RawState<T> = {
 }
 
 type RawStoreInstance<T> = {
-  state: { value: RawState<T> }
-  loading: { value: boolean }
-  error: { value: Error | null }
+  state: Ref<RawState<T>>
+  loading: Ref<boolean>
+  error: Ref<Error | null>
   ensureFresh: (force?: boolean) => Promise<T | null>
   refresh: () => Promise<T | null>
 }

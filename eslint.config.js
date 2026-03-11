@@ -3,6 +3,7 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 import pluginVue from 'eslint-plugin-vue'
 import { defineConfig } from 'eslint/config'
+import autoImports from './.eslintrc-auto-import.json' with { type: 'json' }
 
 export default defineConfig([
   {
@@ -16,5 +17,11 @@ export default defineConfig([
   {
     files: ['**/*.vue'],
     languageOptions: { parserOptions: { parser: tseslint.parser } },
+  },
+  {
+    languageOptions: autoImports,
+    rules: {
+      'no-undef': 'off',
+    },
   },
 ])

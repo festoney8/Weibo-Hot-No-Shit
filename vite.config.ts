@@ -1,12 +1,25 @@
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import monkey, { cdn } from 'vite-plugin-monkey'
 import { fileURLToPath, URL } from 'node:url'
+import AutoImport from 'unplugin-auto-import/vite'
+import monkey, { util, cdn } from 'vite-plugin-monkey'
+import Vue from 'unplugin-vue/vite'
+import Components from 'unplugin-vue-components/vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    Vue(),
+    AutoImport({
+      imports: [util.unimportPreset, 'vue', 'vue-router', 'pinia'],
+      dts: 'src/types/auto-imports.d.ts',
+      eslintrc: {
+        enabled: true,
+      },
+    }),
+    Components({
+      dts: 'src/types/components.d.ts',
+      /* options */
+    }),
     monkey({
       entry: 'src/main.ts',
       userscript: {

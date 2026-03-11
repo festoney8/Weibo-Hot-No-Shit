@@ -1,5 +1,4 @@
 import { useStorage } from '@vueuse/core'
-import { defineStore } from 'pinia'
 import type { EntmtResponse, LifeResponse } from '@/types/api'
 
 const WORD_HISTORY_MAX_AGE_MS = 3 * 86400 * 1000
