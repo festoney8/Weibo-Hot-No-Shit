@@ -35,6 +35,10 @@ const refreshCurrent = async () => {
     logger.error('Manual refresh failed:', error)
   }
 }
+
+const buildWeiboSearchUrl = (word: string) => {
+  return `https://s.weibo.com/weibo?q=${encodeURIComponent(`#${word}#`)}`
+}
 </script>
 
 <template>
@@ -74,8 +78,18 @@ const refreshCurrent = async () => {
       <ul class="hot-list">
         <li v-for="item in currentList" :key="`${activeSource}-${item.rank}-${item.word}`" class="hot-list__item">
           <span class="hot-list__rank" :class="{ 'is-top3': item.rank <= 3 }">{{ item.rank }}</span>
-          <span class="hot-list__word" :title="item.word">{{ item.word }}</span>
-          <span class="hot-list__desc" :style="{ color: item.color || 'var(--hot-color-desc)' }">{{ item.desc }}</span>
+          <a
+            class="hot-list__link"
+            :href="buildWeiboSearchUrl(item.word)"
+            :title="item.word"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="hot-list__word">{{ item.word }}</span>
+            <span class="hot-list__desc" :style="{ color: item.color || 'var(--hot-color-desc)' }">{{
+              item.desc
+            }}</span>
+          </a>
         </li>
       </ul>
     </div>
@@ -83,10 +97,13 @@ const refreshCurrent = async () => {
 </template>
 
 <style lang="scss" scoped>
+body:has([state='noside']) aside {
+  display: none;
+}
 aside {
   position: fixed;
   top: 68px;
-  right: 360px;
+  left: calc(50vw + 274px);
   z-index: 9999;
 }
 .hot-sidebar {
@@ -179,12 +196,12 @@ aside {
 
 .hot-sidebar__list-wrap {
   margin-top: 8px;
-  padding: 0 8px 12px 12px;
+  padding: 0 10px 12px 10px;
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
 
   &::-webkit-scrollbar {
     width: 3px;
@@ -195,7 +212,7 @@ aside {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(148, 163, 184, 0.25);
+    background: rgba(148, 163, 184, 0.3);
     border-radius: 999px;
   }
 }
@@ -216,26 +233,13 @@ aside {
   display: inline-flex;
   justify-content: center;
   height: 1;
-  line-height: 1;
+  line-height: 1.2;
   width: 24px;
   flex: 0 0 24px;
   font-size: 18px;
   color: var(--hot-color-rank);
   font-variant-numeric: tabular-nums;
-  font-family:
-    BlinkMacSystemFont,
-    -apple-system,
-    'Segoe UI',
-    'Roboto',
-    'Oxygen',
-    'Ubuntu',
-    'Cantarell',
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    'Helvetica',
-    'Arial',
-    sans-serif;
+  font-family: var(--vc-font-family);
 
   &.is-top3 {
     font-weight: 700;
@@ -244,10 +248,24 @@ aside {
   }
 }
 
+.hot-list__link {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+
+  &:hover .hot-list__word,
+  &:hover .hot-list__desc {
+    color: var(--hot-color-rank);
+  }
+}
+
 .hot-list__word {
+  display: inline-block;
   flex: 1;
   height: 1;
-  line-height: 1;
+  line-height: 1.2;
   margin-left: 6px;
   min-width: 0;
   font-size: 14px;
@@ -258,11 +276,11 @@ aside {
 }
 
 .hot-list__desc {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   margin-left: 8px;
   height: 1;
-  line-height: 1;
+  line-height: 1.2;
   color: var(--hot-color-desc);
   white-space: nowrap;
 }
@@ -271,7 +289,6 @@ aside {
   from {
     transform: rotate(0deg);
   }
-
   to {
     transform: rotate(360deg);
   }

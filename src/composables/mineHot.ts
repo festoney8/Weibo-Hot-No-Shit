@@ -17,8 +17,12 @@ export const useFilteredMineHotSearch = () => {
       if (!word) {
         return false
       }
-      // 广告
-      if (item.small_icon_desc === '商') {
+      // 白名单规则
+      if (item.icon_desc && ['辟谣'].includes(item.icon_desc.trim())) {
+        return true
+      }
+      if (item.small_icon_desc === '商' || item.rank === null) {
+        // 广告
         logger.debug(`过滤 mine 广告热搜: ${word}`)
         return false
       }
@@ -38,10 +42,10 @@ export const useFilteredMineHotSearch = () => {
     return filteredItems.map((item, index) => {
       let desc = ''
       if (typeof item.description === 'number') {
-        desc = (item.description / 10000).toFixed(1)
+        desc = (item.description / 10000).toFixed(1) + '万'
       } else if (typeof item.description === 'string') {
         if (item.description === '好友正在看') {
-          desc = ''
+          desc = '♥'
         } else if (item.description.endsWith('登顶')) {
           desc = 'TOP'
         } else if (item.description.endsWith('霸榜')) {
@@ -49,6 +53,9 @@ export const useFilteredMineHotSearch = () => {
         } else {
           desc = item.description
         }
+      }
+      if (item.icon_desc === '辟谣') {
+        desc = '辟谣'
       }
       return {
         rank: index + 1,

@@ -44,7 +44,7 @@ export const useFilteredDefaultHotSearch = () => {
       return {
         rank: index + 1,
         word: item.word,
-        desc: (item.num / 10000).toFixed(1),
+        desc: (item.num / 10000).toFixed(1) + '万',
         color: item.icon_desc_color ?? '',
       }
     })

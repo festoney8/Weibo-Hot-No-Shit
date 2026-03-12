@@ -1,7 +1,7 @@
 import { useStorage } from '@vueuse/core'
 import type { EntmtResponse, LifeResponse } from '@/types/api'
 
-const WORD_HISTORY_MAX_AGE_MS = 7 * 86400 * 1000
+const WORD_HISTORY_MAX_AGE_MS = 5 * 86400 * 1000
 
 type WordTimestampMap = Record<string, number>
 

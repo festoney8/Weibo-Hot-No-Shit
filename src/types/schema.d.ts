@@ -5412,7 +5412,7 @@ export interface components {
       word: string
       word_scheme: string
       /** @description 排名 */
-      rank: number
+      rank: number | null
       topic_flag: number
       /** @description 文字描述或热度值 */
       description: string
