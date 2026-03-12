@@ -6,8 +6,10 @@
 import { useFilteredDefaultHotSearch } from './composables/defaultHot'
 import { useFilteredMineHotSearch } from './composables/mineHot'
 
-console.log(useFilteredMineHotSearch().hotSearches.value)
-console.log(useFilteredDefaultHotSearch().hotSearches.value)
+watchEffect(() => {
+  console.log('mine', useFilteredMineHotSearch().hotSearches.value)
+  console.log('default', useFilteredDefaultHotSearch().hotSearches.value)
+})
 </script>
 
 <style lang="scss" scoped></style>

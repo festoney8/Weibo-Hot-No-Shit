@@ -1,7 +1,7 @@
 import { useStorage } from '@vueuse/core'
 import type { EntmtResponse, LifeResponse } from '@/types/api'
 
-const WORD_HISTORY_MAX_AGE_MS = 3 * 86400 * 1000
+const WORD_HISTORY_MAX_AGE_MS = 7 * 86400 * 1000
 
 type WordTimestampMap = Record<string, number>
 
@@ -10,11 +10,9 @@ const createWordHistoryStore = (id: string, storageKey: string) => {
     const wordMap = useStorage<WordTimestampMap>(storageKey, {}, localStorage)
 
     const pruneExpired = (now = Date.now()) => {
-      const minTimestamp = now - WORD_HISTORY_MAX_AGE_MS
       const nextMap: WordTimestampMap = { ...wordMap.value }
-
       Object.entries(nextMap).forEach(([word, timestamp]) => {
-        if (timestamp < minTimestamp) {
+        if (timestamp < now - WORD_HISTORY_MAX_AGE_MS) {
           delete nextMap[word]
         }
       })
@@ -23,24 +21,22 @@ const createWordHistoryStore = (id: string, storageKey: string) => {
 
     const touchWords = (words: string[], now = Date.now()) => {
       const nextMap: WordTimestampMap = { ...wordMap.value }
-
-      for (const word of words) {
-        const normalizedWord = word.trim()
-        if (!normalizedWord) {
-          continue
+      for (let word of words) {
+        word = word.trim()
+        if (word) {
+          nextMap[word] = now
         }
-        nextMap[normalizedWord] = now
       }
       wordMap.value = nextMap
       pruneExpired(now)
     }
 
     const hasWord = (word: string) => {
-      const normalizedWord = word.trim()
-      if (!normalizedWord) {
+      word = word.trim()
+      if (!word) {
         return false
       }
-      return typeof wordMap.value[normalizedWord] === 'number'
+      return typeof wordMap.value[word] === 'number'
     }
 
     return {
