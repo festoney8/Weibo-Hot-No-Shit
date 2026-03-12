@@ -5,6 +5,12 @@ import { logger } from './utils/logger'
 import css from './style.scss?inline'
 
 const main = async () => {
+  logger.info('script start', location.href)
+  // 0. 排除页面
+  if (location.origin === 's.weibo.com' && location.pathname === '/') {
+    logger.info('skip page', location.href)
+    return
+  }
   // 1. 立即开始获取数据
   const pinia = createPinia()
   void ensureAllRawStoresFresh(pinia, false)

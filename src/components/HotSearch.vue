@@ -191,6 +191,7 @@ const closeSettingMenu = () => {
           </a>
         </li>
       </ul>
+      <div class="hot-list__end" aria-hidden="true">—— END ——</div>
     </div>
   </aside>
 
@@ -375,6 +376,15 @@ aside {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+.hot-list__end {
+  margin: 6px 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--hot-color-muted);
+  letter-spacing: 0.4px;
+  user-select: none;
 }
 
 .hot-list__item {

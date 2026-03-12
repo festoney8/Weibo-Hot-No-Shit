@@ -45,11 +45,11 @@ export const useFilteredMineHotSearch = () => {
         desc = (item.description / 10000).toFixed(1) + '万'
       } else if (typeof item.description === 'string') {
         if (item.description === '好友正在看') {
-          desc = '❤'
+          desc = '●'
         } else if (item.description.endsWith('登顶')) {
-          desc = 'TOP'
+          desc = '登顶'
         } else if (item.description.endsWith('霸榜')) {
-          desc = 'HOT'
+          desc = '霸榜'
         } else {
           desc = item.description
         }
