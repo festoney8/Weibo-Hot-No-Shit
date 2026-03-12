@@ -1,10 +1,14 @@
-// 隐藏 weibo.com 热搜侧边栏
+// weibo.com
 #__sidebar,
 .wbpro-side-main {
   display: none !important;
 }
 
-// 隐藏 s.weibo.com 侧边栏
+// s.weibo.com
 #pl_feed_main .main-side {
   display: none !important;
+}
+#pl_common_scrollToTop .m-gotop {
+  right: unset !important;
+  left: calc(50vw + 566px) !important;
 }

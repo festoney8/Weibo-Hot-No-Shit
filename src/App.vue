@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <HotSearch />
-  </div>
+  <HotSearch />
 </template>
 
 <script setup lang="ts"></script>

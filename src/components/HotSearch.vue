@@ -230,7 +230,7 @@ aside {
   --hot-color-rank-top3: #f26d5f;
 
   width: 290px;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 85px);
   display: flex;
   flex-direction: column;
   background: var(--hot-color-bg);
