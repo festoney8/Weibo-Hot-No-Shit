@@ -36,10 +36,24 @@ export const useFilteredMineHotSearch = () => {
     })
 
     return filteredItems.map((item, index) => {
+      let desc = ''
+      if (typeof item.description === 'number') {
+        desc = (item.description / 10000).toFixed(1)
+      } else if (typeof item.description === 'string') {
+        if (item.description === '好友正在看') {
+          desc = ''
+        } else if (item.description.endsWith('登顶')) {
+          desc = 'TOP'
+        } else if (item.description.endsWith('霸榜')) {
+          desc = 'HOT'
+        } else {
+          desc = item.description
+        }
+      }
       return {
         rank: index + 1,
         word: item.word,
-        desc: item.description === '好友正在看' ? '' : item.description,
+        desc: desc,
         color: item.icon_desc_color ?? '',
       }
     })
