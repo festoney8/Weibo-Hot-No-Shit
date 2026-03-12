@@ -12,6 +12,7 @@ const main = async () => {
   // 2. 等待head出现，注入css
   waitForHead().then(() => {
     const el = document.createElement('style')
+    el.id = 'no-shit'
     el.textContent = css
     document.documentElement.appendChild(el)
   })

@@ -6,6 +6,9 @@ import { useFilteredDefaultHotSearch } from '@/composables/defaultHot'
 import { useFilteredMineHotSearch } from '@/composables/mineHot'
 import { useMineRawStore, useDefaultRawStore } from '@/stores/raw'
 import { logger } from '@/utils/logger'
+import SettingMenu from './SettingMenu.vue'
+import SettingAltLine from './icons/SettingAltLine.vue'
+import RefreshSolid from './icons/RefreshSolid.vue'
 
 const REFRESH_COOLDOWN_MS = 30000
 
@@ -111,12 +114,36 @@ const refreshCurrent = async () => {
 const buildWeiboSearchUrl = (word: string) => {
   return `https://s.weibo.com/weibo?q=${encodeURIComponent(`#${word}#`)}`
 }
+
+const showSettingMenu = ref(false)
+const settingDialogRef = ref<HTMLDialogElement | null>(null)
+
+const openSettingMenu = () => {
+  showSettingMenu.value = true
+  queueMicrotask(() => {
+    if (settingDialogRef.value && !settingDialogRef.value.open) {
+      settingDialogRef.value.showModal()
+    }
+  })
+}
+
+const closeSettingMenu = () => {
+  if (settingDialogRef.value?.open) {
+    settingDialogRef.value.close()
+  }
+  showSettingMenu.value = false
+}
 </script>
 
 <template>
   <aside class="hot-sidebar" aria-label="微博热搜侧栏">
     <header class="hot-sidebar__header">
-      <h2 class="hot-sidebar__title">微博热搜</h2>
+      <div class="hot-sidebar__title-group">
+        <h2 class="hot-sidebar__title">微博热搜</h2>
+        <button class="hot-sidebar__setting" type="button" aria-label="打开设置" @click="openSettingMenu">
+          <SettingAltLine class="hot-sidebar__setting-icon" />
+        </button>
+      </div>
       <button class="hot-sidebar__refresh" type="button" :disabled="isRefreshing" @click="refreshCurrent">
         <RefreshSolid :class="['hot-sidebar__refresh-icon', { 'is-spinning': isRefreshing }]" :key="refreshIconKey" />
         <span>{{ '点击刷新' }}</span>
@@ -166,6 +193,17 @@ const buildWeiboSearchUrl = (word: string) => {
       </ul>
     </div>
   </aside>
+
+  <dialog
+    ref="settingDialogRef"
+    class="setting-menu-dialog"
+    @close="showSettingMenu = false"
+    @cancel.prevent="closeSettingMenu"
+    @click.self="closeSettingMenu"
+  >
+    <button class="setting-menu-dialog__close" type="button" @click="closeSettingMenu">×</button>
+    <SettingMenu />
+  </dialog>
 </template>
 
 <style lang="scss" scoped>
@@ -191,7 +229,7 @@ aside {
   --hot-color-rank: #ff8200;
   --hot-color-rank-top3: #f26d5f;
 
-  width: 282px;
+  width: 290px;
   height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
@@ -213,6 +251,38 @@ aside {
   font-size: 16px;
   color: var(--hot-color-title);
   font-weight: 500;
+}
+
+.hot-sidebar__title-group {
+  display: inline-flex;
+  align-items: center;
+}
+
+.hot-sidebar__setting {
+  display: inline-flex;
+  margin-left: 6px;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  color: #939393;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.16s ease;
+  cursor: pointer;
+}
+
+.hot-sidebar__header:hover .hot-sidebar__setting {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.hot-sidebar__setting-icon {
+  width: 24px;
+  height: 24px;
 }
 
 .hot-sidebar__refresh {
@@ -368,6 +438,30 @@ aside {
   line-height: 1.2;
   color: var(--hot-color-desc);
   white-space: nowrap;
+}
+
+.setting-menu-dialog {
+  border: none;
+  border-radius: 10px;
+  padding: 16px;
+  min-width: 320px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.2);
+
+  &::backdrop {
+    background: rgba(15, 23, 42, 0.35);
+  }
+}
+
+.setting-menu-dialog__close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--hot-color-muted);
+  cursor: pointer;
 }
 
 @keyframes spin {

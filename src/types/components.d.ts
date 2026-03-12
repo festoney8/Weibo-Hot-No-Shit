@@ -11,9 +11,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    DialogComp: typeof import('../components/MenuComp.vue')['default']
     HotSearch: typeof import('./../components/HotSearch.vue')['default']
-    MenuComp: typeof import('./../components/MenuComp.vue')['default']
     RefreshSolid: typeof import('./../components/icons/RefreshSolid.vue')['default']
+    SettingAltLine: typeof import('./../components/icons/SettingAltLine.vue')['default']
+    SettingMenu: typeof import('./../components/SettingMenu.vue')['default']
   }
 }
