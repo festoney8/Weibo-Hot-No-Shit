@@ -28,9 +28,6 @@ const main = async () => {
         })(),
       )
   })
-
-  // 4. 注册油猴菜单
-  // Todo: registerMenu
 }
 
 main().catch((e) => {

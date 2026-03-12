@@ -10,4 +10,4 @@ console.log(useFilteredMineHotSearch().hotSearches.value)
 console.log(useFilteredDefaultHotSearch().hotSearches.value)
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped></style>
