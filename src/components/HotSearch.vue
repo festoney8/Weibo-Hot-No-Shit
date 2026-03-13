@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
+import { useDraggable } from '@vueuse/core'
 import { useFilteredDefaultHotSearch } from '@/composables/defaultHot'
 import { useFilteredMineHotSearch } from '@/composables/mineHot'
 import { useMineRawStore, useDefaultRawStore } from '@/stores/raw'
@@ -117,6 +118,19 @@ const buildWeiboSearchUrl = (word: string) => {
 
 const showSettingMenu = ref(false)
 const settingDialogRef = ref<HTMLDialogElement | null>(null)
+const settingMenuDragHandleRef = ref<HTMLElement | null>(null)
+
+const {
+  x: dialogX,
+  y: dialogY,
+  style: settingDialogDragStyle,
+} = useDraggable(settingDialogRef, {
+  handle: settingMenuDragHandleRef,
+  preventDefault: true,
+  stopPropagation: true,
+  containerElement: () => document.documentElement,
+  restrictInView: true,
+})
 
 const openSettingMenu = () => {
   showSettingMenu.value = true
@@ -124,6 +138,18 @@ const openSettingMenu = () => {
     if (settingDialogRef.value && !settingDialogRef.value.open) {
       settingDialogRef.value.showModal()
     }
+
+    nextTick(() => {
+      if (!settingDialogRef.value) {
+        return
+      }
+
+      const rect = settingDialogRef.value.getBoundingClientRect()
+      dialogX.value = Math.max(0, (window.innerWidth - rect.width) / 2)
+      dialogY.value = Math.max(0, (window.innerHeight - rect.height) / 2)
+
+      settingMenuDragHandleRef.value = settingDialogRef.value.querySelector<HTMLElement>('.setting-menu__tabs')
+    })
   })
 }
 
@@ -195,7 +221,13 @@ const closeSettingMenu = () => {
     </div>
   </aside>
 
-  <dialog ref="settingDialogRef" class="setting-menu-dialog" @close="showSettingMenu = false" @cancel.prevent>
+  <dialog
+    ref="settingDialogRef"
+    class="setting-menu-dialog"
+    :style="[settingDialogDragStyle, { position: 'fixed', margin: '0' }]"
+    @close="showSettingMenu = false"
+    @cancel.prevent
+  >
     <button class="setting-menu-dialog__close" type="button" aria-label="关闭设置" @click="closeSettingMenu">×</button>
     <SettingMenu />
   </dialog>
@@ -449,7 +481,7 @@ aside {
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.2);
 
   &::backdrop {
-    background: rgba(15, 23, 42, 0.35);
+    background: rgba(15, 23, 42, 0.15);
   }
 }
 

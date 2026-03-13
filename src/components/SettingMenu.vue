@@ -11,14 +11,14 @@ const { keywords, names } = storeToRefs(settingsStore)
 const activeTab = ref<SettingsTabKey>('keywords')
 const keywordsDraft = ref('')
 const namesDraft = ref('')
-const currentEditingTab = ref<SettingsTabKey | null>(null)
+const textareaRef = ref<HTMLTextAreaElement | null>(null)
 
 const toMultiline = (items: string[]) => items.join('\n')
 
 watch(
   keywords,
   (value) => {
-    if (currentEditingTab.value === 'keywords') {
+    if (textareaRef.value === document.activeElement) {
       return
     }
     keywordsDraft.value = toMultiline(value)
@@ -29,7 +29,7 @@ watch(
 watch(
   names,
   (value) => {
-    if (currentEditingTab.value === 'names') {
+    if (textareaRef.value === document.activeElement) {
       return
     }
     namesDraft.value = toMultiline(value)
@@ -58,15 +58,14 @@ const currentDraft = computed({
 })
 
 const currentPlaceholder = computed(() => {
-  return activeTab.value === 'keywords' ? '每行一个关键词，支持正则（无需flag），如：/abc|\\d+/' : '每行一个人名'
+  return activeTab.value === 'keywords' ? '每行一个关键词，支持正则（无需flag）如：/abc|\\d+/' : '每行一个人名'
 })
 
-const startEditing = () => {
-  currentEditingTab.value = activeTab.value
-}
-
-const stopEditing = () => {
-  currentEditingTab.value = null
+const preventSavePageShortcut = (event: KeyboardEvent) => {
+  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 's') {
+    event.preventDefault()
+    event.stopPropagation()
+  }
 }
 
 const syncDraftToStore = () => {
@@ -108,13 +107,13 @@ watch([keywordsDraft, namesDraft], syncDraftToStore)
       </header>
 
       <textarea
+        ref="textareaRef"
         v-model="currentDraft"
         class="setting-menu__textarea"
         :placeholder="currentPlaceholder"
         rows="16"
         spellcheck="false"
-        @focus="startEditing"
-        @blur="stopEditing"
+        @keydown="preventSavePageShortcut"
         @cancel.prevent
       />
     </div>
@@ -135,6 +134,11 @@ watch([keywordsDraft, namesDraft], syncDraftToStore)
   gap: 6px;
   padding-right: 8px;
   border-right: 1px solid #eceef2;
+  // cursor: grab;
+
+  // &:active {
+  //   cursor: grabbing;
+  // }
 }
 
 .setting-menu__tab {
