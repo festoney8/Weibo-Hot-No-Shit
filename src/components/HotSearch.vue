@@ -3,6 +3,7 @@ import { storeToRefs } from 'pinia'
 import { computed, nextTick, ref } from 'vue'
 import { useThrottleFn } from '@vueuse/core'
 import { useDraggable } from '@vueuse/core'
+import { useElementBounding, useWindowSize, type Position } from '@vueuse/core'
 import { useFilteredDefaultHotSearch } from '@/composables/defaultHot'
 import { useFilteredMineHotSearch } from '@/composables/mineHot'
 import { useMineRawStore, useDefaultRawStore } from '@/stores/raw'
@@ -119,18 +120,52 @@ const buildWeiboSearchUrl = (word: string) => {
 const showSettingMenu = ref(false)
 const settingDialogRef = ref<HTMLDialogElement | null>(null)
 const settingMenuDragHandleRef = ref<HTMLElement | null>(null)
+const settingMenuPanelRef = ref<HTMLElement | null>(null)
+const hasInitializedSettingPanelPos = ref(false)
+
+const windowSize = useWindowSize({ includeScrollbar: false })
+const { width: panelWidth, height: panelHeight } = useElementBounding(settingMenuPanelRef, {
+  windowScroll: false,
+})
 
 const {
-  x: dialogX,
-  y: dialogY,
-  style: settingDialogDragStyle,
-} = useDraggable(settingDialogRef, {
+  x: panelX,
+  y: panelY,
+  style: settingPanelDragStyle,
+} = useDraggable(settingMenuPanelRef, {
+  initialValue: {
+    x: 0,
+    y: 0,
+  },
   handle: settingMenuDragHandleRef,
   preventDefault: true,
   stopPropagation: true,
-  containerElement: () => document.documentElement,
-  restrictInView: true,
+  onMove: (position: Position) => {
+    const maxX = Math.max(windowSize.width.value - panelWidth.value, 0)
+    const maxY = Math.max(windowSize.height.value - panelHeight.value, 0)
+    if (position.x < 0) {
+      position.x = 0
+    }
+    if (position.y < 0) {
+      position.y = 0
+    }
+    if (position.x > maxX) {
+      position.x = maxX
+    }
+    if (position.y > maxY) {
+      position.y = maxY
+    }
+  },
 })
+
+const centerSettingPanel = () => {
+  if (!settingMenuPanelRef.value) {
+    return
+  }
+  const rect = settingMenuPanelRef.value.getBoundingClientRect()
+  panelX.value = Math.max((windowSize.width.value - rect.width) / 2, 0)
+  panelY.value = Math.max((windowSize.height.value - rect.height) / 2, 0)
+}
 
 const openSettingMenu = () => {
   showSettingMenu.value = true
@@ -143,12 +178,11 @@ const openSettingMenu = () => {
       if (!settingDialogRef.value) {
         return
       }
-
-      const rect = settingDialogRef.value.getBoundingClientRect()
-      dialogX.value = Math.max(0, (window.innerWidth - rect.width) / 2)
-      dialogY.value = Math.max(0, (window.innerHeight - rect.height) / 2)
-
       settingMenuDragHandleRef.value = settingDialogRef.value.querySelector<HTMLElement>('.setting-menu__tabs')
+      if (!hasInitializedSettingPanelPos.value) {
+        centerSettingPanel()
+        hasInitializedSettingPanelPos.value = true
+      }
     })
   })
 }
@@ -221,15 +255,13 @@ const closeSettingMenu = () => {
     </div>
   </aside>
 
-  <dialog
-    ref="settingDialogRef"
-    class="setting-menu-dialog"
-    :style="[settingDialogDragStyle, { position: 'fixed', margin: '0' }]"
-    @close="showSettingMenu = false"
-    @cancel.prevent
-  >
-    <button class="setting-menu-dialog__close" type="button" aria-label="关闭设置" @click="closeSettingMenu">×</button>
-    <SettingMenu />
+  <dialog ref="settingDialogRef" class="setting-menu-dialog" @close="showSettingMenu = false" @cancel.prevent>
+    <div ref="settingMenuPanelRef" class="setting-menu-panel" :style="[settingPanelDragStyle, { position: 'fixed' }]">
+      <button class="setting-menu-dialog__close" type="button" aria-label="关闭设置" @click="closeSettingMenu">
+        ×
+      </button>
+      <SettingMenu />
+    </div>
   </dialog>
 </template>
 
@@ -475,14 +507,26 @@ aside {
 
 .setting-menu-dialog {
   border: none;
-  border-radius: 10px;
-  padding: 16px;
-  min-width: 320px;
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.2);
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  max-width: none;
+  background: transparent;
+  overflow: visible;
 
   &::backdrop {
-    background: rgba(15, 23, 42, 0.15);
+    background: transparent;
   }
+}
+
+.setting-menu-panel {
+  margin: 0;
+  border-radius: 10px;
+  padding: 16px;
+  min-width: 640px;
+  background: #fff;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.2);
 }
 
 .setting-menu-dialog__close {
