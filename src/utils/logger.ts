@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 const PROJECT_NAME = '[Weibo-Hot-No-Shit]'
 const time = () => performance.now().toFixed(2)
 
