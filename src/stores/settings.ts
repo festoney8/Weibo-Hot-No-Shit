@@ -2,17 +2,9 @@ import { useGMValue } from '@/composables/useGMValue'
 import { logger } from '@/utils/logger'
 import { useDebounceFn } from '@vueuse/core'
 
-const KEYWORDS_STORAGE_KEY = 'blacklist.keywords'
-const NAMES_STORAGE_KEY = 'blacklist.names'
-const SETTINGS_WRITE_DEBOUNCE_MS = 100
-
 const normalizeList = (items: string[]) => {
   const normalized = items.map((item) => item.trim()).filter((item) => item.length > 0)
   return Array.from(new Set(normalized))
-}
-
-const escapeForRegex = (value: string) => {
-  return value.replace(/[*+?^${}().|[\]\\]/g, '\\$&')
 }
 
 const buildMergedRegex = (items: string[]) => {
@@ -24,8 +16,12 @@ const buildMergedRegex = (items: string[]) => {
     if (!trimmed || trimmed === '//') {
       continue
     }
-
-    const rawPattern = trimmed.startsWith('/') && trimmed.endsWith('/') ? trimmed.slice(1, -1) : escapeForRegex(trimmed)
+    let rawPattern: string
+    if (trimmed.startsWith('/') && trimmed.endsWith('/')) {
+      rawPattern = trimmed.slice(1, -1)
+    } else {
+      rawPattern = trimmed.replace(/[*+?^${}().|[\]\\]/g, '\\$&')
+    }
     try {
       void new RegExp(rawPattern, 'iu')
       const withoutEscapedSlash = rawPattern.replace(/\\\\/g, '')
@@ -63,18 +59,18 @@ const matchesByMergedRegex = (value: string, mergedRegex: RegExp[]) => {
 }
 
 export const usePluginSettingsStore = defineStore('plugin-settings', () => {
-  const keywords = useGMValue<string[]>(KEYWORDS_STORAGE_KEY, [])
-  const names = useGMValue<string[]>(NAMES_STORAGE_KEY, [])
+  const keywords = useGMValue<string[]>('blacklist.keywords', [])
+  const names = useGMValue<string[]>('blacklist.names', [])
   const keywordMergedRegex = computed(() => buildMergedRegex(keywords.value))
   const nameMergedRegex = computed(() => buildMergedRegex(names.value))
 
   const commitKeywords = useDebounceFn((nextKeywords: string[]) => {
     keywords.value = normalizeList(nextKeywords)
-  }, SETTINGS_WRITE_DEBOUNCE_MS)
+  }, 100)
 
   const commitNames = useDebounceFn((nextNames: string[]) => {
     names.value = normalizeList(nextNames)
-  }, SETTINGS_WRITE_DEBOUNCE_MS)
+  }, 100)
 
   const setKeywords = (nextKeywords: string[]) => {
     commitKeywords(nextKeywords)

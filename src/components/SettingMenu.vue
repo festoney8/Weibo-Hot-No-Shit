@@ -58,7 +58,10 @@ const currentDraft = computed({
 })
 
 const currentPlaceholder = computed(() => {
-  return activeTab.value === 'keywords' ? '每行一个关键词，支持正则（无需flag）如：/abc|\\d+/' : '每行一个人名'
+  if (activeTab.value === 'keywords') {
+    return '每行一个关键词，支持正则（无需flag）如：/abc|\\d+/'
+  }
+  return '每行一个人名，项目 README 提供热搜常见人名列表'
 })
 
 const preventSavePageShortcut = (event: KeyboardEvent) => {
