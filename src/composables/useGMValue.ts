@@ -1,4 +1,5 @@
 import { type WatchOptions } from 'vue'
+import { watchDebounced } from '@vueuse/core'
 import {
   GM_addValueChangeListener,
   GM_getValue,
@@ -11,14 +12,17 @@ type UseGMValueOptions = {
   deep?: boolean
   flush?: WatchOptions['flush']
   listenToChanges?: boolean
+  debounceMs?: number
 }
 
 export const useGMValue = <T>(key: string, initialValue: T, options: UseGMValueOptions = {}) => {
-  const { deep = true, flush = 'pre', listenToChanges = true } = options
-
-  const state = ref<T>(GM_getValue(key, initialValue) as T)
-
-  watch(
+  const { deep = true, flush = 'pre', listenToChanges = true, debounceMs = 1000 } = options
+  const state = ref(GM_getValue<T>(key, initialValue))
+  let ms = debounceMs
+  if (ms <= 0) {
+    ms = 200
+  }
+  watchDebounced(
     state,
     (value) => {
       GM_setValue(key, value)
@@ -26,6 +30,7 @@ export const useGMValue = <T>(key: string, initialValue: T, options: UseGMValueO
     {
       deep,
       flush,
+      debounce: ms,
     },
   )
 

@@ -4,7 +4,7 @@ import { useDebounceFn } from '@vueuse/core'
 
 const KEYWORDS_STORAGE_KEY = 'blacklist.keywords'
 const NAMES_STORAGE_KEY = 'blacklist.names'
-const SETTINGS_WRITE_DEBOUNCE_MS = 1000
+const SETTINGS_WRITE_DEBOUNCE_MS = 100
 
 const normalizeList = (items: string[]) => {
   const normalized = items.map((item) => item.trim()).filter((item) => item.length > 0)
