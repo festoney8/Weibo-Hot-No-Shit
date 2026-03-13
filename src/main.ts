@@ -7,7 +7,7 @@ import css from './style.scss?inline'
 const main = async () => {
   logger.info('script start', location.href)
   // 0. 排除页面
-  if (location.origin === 's.weibo.com' && location.pathname === '/') {
+  if (location.hostname === 's.weibo.com' && location.pathname === '/') {
     logger.info('skip page', location.href)
     return
   }
