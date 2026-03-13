@@ -1,6 +1,7 @@
 import type { HotSearch } from '@/types/hotSearch'
 import { useEntmtWordHistoryStore, useLifeWordHistoryStore } from '@/stores/history'
 import { useDefaultRawStore } from '@/stores/raw'
+import { usePluginSettingsStore } from '@/stores/settings'
 import { logger } from '@/utils/logger'
 
 export const useFilteredDefaultHotSearch = () => {
@@ -8,6 +9,7 @@ export const useFilteredDefaultHotSearch = () => {
   const { state } = storeToRefs(defaultRawStore)
   const lifeWordHistoryStore = useLifeWordHistoryStore()
   const entmtWordHistoryStore = useEntmtWordHistoryStore()
+  const pluginSettingsStore = usePluginSettingsStore()
 
   const hotSearches = computed<HotSearch[]>(() => {
     const sourceItems = state.value.data?.data.realtime ?? []
@@ -35,6 +37,16 @@ export const useFilteredDefaultHotSearch = () => {
       // 娱乐生活类
       if (lifeWordHistoryStore.hasWord(word) || entmtWordHistoryStore.hasWord(word)) {
         logger.debug(`过滤 default 娱乐生活热搜: ${word}`)
+        return false
+      }
+      // 自定义关键词
+      if (pluginSettingsStore.matchKeyword(word) || pluginSettingsStore.matchKeyword(item.word_scheme)) {
+        logger.debug(`过滤 default 关键词命中: ${word}`)
+        return false
+      }
+      // 自定义人名
+      if (pluginSettingsStore.matchName(word) || pluginSettingsStore.matchName(item.word_scheme)) {
+        logger.debug(`过滤 default 人名命中: ${word}`)
         return false
       }
       return true
