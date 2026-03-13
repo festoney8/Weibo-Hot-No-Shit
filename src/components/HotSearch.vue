@@ -195,14 +195,8 @@ const closeSettingMenu = () => {
     </div>
   </aside>
 
-  <dialog
-    ref="settingDialogRef"
-    class="setting-menu-dialog"
-    @close="showSettingMenu = false"
-    @cancel.prevent="closeSettingMenu"
-    @click.self="closeSettingMenu"
-  >
-    <button class="setting-menu-dialog__close" type="button" @click="closeSettingMenu">×</button>
+  <dialog ref="settingDialogRef" class="setting-menu-dialog" @close="showSettingMenu = false" @cancel.prevent>
+    <button class="setting-menu-dialog__close" type="button" aria-label="关闭设置" @click="closeSettingMenu">×</button>
     <SettingMenu />
   </dialog>
 </template>
@@ -396,7 +390,6 @@ aside {
 .hot-list__rank {
   display: inline-flex;
   justify-content: center;
-  height: 1;
   line-height: 1.2;
   width: 24px;
   flex: 0 0 24px;
@@ -429,7 +422,6 @@ aside {
 .hot-list__word {
   display: inline-block;
   flex: 1;
-  height: 1;
   line-height: 1.2;
   margin-left: 6px;
   min-width: 0;
@@ -444,7 +436,6 @@ aside {
   font-size: 13px;
   font-weight: 600;
   margin-left: 8px;
-  height: 1;
   line-height: 1.2;
   color: var(--hot-color-desc);
   white-space: nowrap;
@@ -466,12 +457,19 @@ aside {
   position: absolute;
   top: 8px;
   right: 10px;
+  width: 32px;
+  height: 32px;
   border: none;
+  border-radius: 8px;
   background: transparent;
-  font-size: 20px;
+  color: #7f8998;
+  font-size: 28px;
   line-height: 1;
-  color: var(--hot-color-muted);
   cursor: pointer;
+
+  &:hover {
+    background: #f3f4f6;
+  }
 }
 
 @keyframes spin {

@@ -1,8 +1,10 @@
 import { useGMValue } from '@/composables/useGMValue'
 import { logger } from '@/utils/logger'
+import { useDebounceFn } from '@vueuse/core'
 
-const KEYWORDS_STORAGE_KEY = 'weibo-hot-no-shit:settings:keywords'
-const NAMES_STORAGE_KEY = 'weibo-hot-no-shit:settings:names'
+const KEYWORDS_STORAGE_KEY = 'blacklist.keywords'
+const NAMES_STORAGE_KEY = 'blacklist.names'
+const SETTINGS_WRITE_DEBOUNCE_MS = 200
 
 const normalizeList = (items: string[]) => {
   const normalized = items.map((item) => item.trim()).filter((item) => item.length > 0)
@@ -25,7 +27,7 @@ const buildMergedRegex = (items: string[]) => {
 
     const rawPattern = trimmed.startsWith('/') && trimmed.endsWith('/') ? trimmed.slice(1, -1) : escapeForRegex(trimmed)
     try {
-      void new RegExp(rawPattern, 'ius')
+      void new RegExp(rawPattern, 'iu')
       const withoutEscapedSlash = rawPattern.replace(/\\\\/g, '')
       if (/\\\d|\\k</.test(withoutEscapedSlash)) {
         validBackrefParts.push(rawPattern)
@@ -40,10 +42,10 @@ const buildMergedRegex = (items: string[]) => {
   const mergedRegex: RegExp[] = []
   try {
     if (validNormalParts.length > 0) {
-      mergedRegex.push(new RegExp(validNormalParts.join('|'), 'ius'))
+      mergedRegex.push(new RegExp(validNormalParts.join('|'), 'iu'))
     }
     for (const pattern of validBackrefParts) {
-      mergedRegex.push(new RegExp(pattern, 'ius'))
+      mergedRegex.push(new RegExp(pattern, 'iu'))
     }
   } catch (error) {
     logger.error('Build merged regex failed in settings store:', error)
@@ -66,12 +68,20 @@ export const usePluginSettingsStore = defineStore('plugin-settings', () => {
   const keywordMergedRegex = computed(() => buildMergedRegex(keywords.value))
   const nameMergedRegex = computed(() => buildMergedRegex(names.value))
 
-  const setKeywords = (nextKeywords: string[]) => {
+  const commitKeywords = useDebounceFn((nextKeywords: string[]) => {
     keywords.value = normalizeList(nextKeywords)
+  }, SETTINGS_WRITE_DEBOUNCE_MS)
+
+  const commitNames = useDebounceFn((nextNames: string[]) => {
+    names.value = normalizeList(nextNames)
+  }, SETTINGS_WRITE_DEBOUNCE_MS)
+
+  const setKeywords = (nextKeywords: string[]) => {
+    commitKeywords(nextKeywords)
   }
 
   const setNames = (nextNames: string[]) => {
-    names.value = normalizeList(nextNames)
+    commitNames(nextNames)
   }
 
   const matchKeyword = (value: string) => {
