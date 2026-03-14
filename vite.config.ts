@@ -36,6 +36,7 @@ export default defineConfig({
         exclude: [
           // '*://weibo.com/u/*',
           '*://weibo.com/ttarticle/*',
+          '*://weibo.com/tv',
           '*://weibo.com/tv/*',
           '*://weibo.com/aj/*',
           '*://s.weibo.com/top/*',
