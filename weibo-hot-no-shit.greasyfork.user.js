@@ -1,15 +1,15 @@
 // ==UserScript==
-// @name         Weibo-Hot-No-Shit
+// @name         微博热搜净化 Weibo-Hot-No-Shit
 // @namespace    http://tampermonkey.net/
-// @version      1.0.0
+// @version      1.0.1
 // @author       festoney8
 // @description  净化微博热搜边栏，去除闲杂内容，支持关键词过滤
 // @license      MIT
 // @icon         https://weibo.com/favicon.ico
 // @homepage     https://github.com/festoney8/Weibo-Hot-No-Shit
 // @supportURL   https://github.com/festoney8/Weibo-Hot-No-Shit
-// @downloadURL  https://update.greasyfork.org/scripts/569576/Weibo-Hot-No-Shit.user.js
-// @updateURL    https://update.greasyfork.org/scripts/569576/Weibo-Hot-No-Shit.meta.js
+// @downloadURL  https://update.greasyfork.org/scripts/569576/%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C%E5%87%80%E5%8C%96%20Weibo-Hot-No-Shit.user.js
+// @updateURL    https://update.greasyfork.org/scripts/569576/%E5%BE%AE%E5%8D%9A%E7%83%AD%E6%90%9C%E5%87%80%E5%8C%96%20Weibo-Hot-No-Shit.meta.js
 // @match        *://weibo.com/*
 // @match        *://s.weibo.com/*
 // @exclude      *://weibo.com/ttarticle/*
@@ -1464,7 +1464,6 @@ function useWindowSize(options = {}) {
       console.info(PROJECT_NAME, time() + "ms", ...args);
     },
     debug(...args) {
-      console.debug(PROJECT_NAME, time() + "ms", ...args);
     }
   };
   const RAW_TTL_MS = 3 * 60 * 1e3;
@@ -1708,27 +1707,21 @@ function useWindowSize(options = {}) {
           return false;
         }
         if (item.icon_desc && ["辟谣"].includes(item.icon_desc.trim())) {
-          logger.debug(`保留 default 热搜: ${word}`);
           return true;
         }
         if (item.is_ad === 1 || item.topic_ad === 1 || item.small_icon_desc === "商" || item.monitors) {
-          logger.debug(`过滤 default 广告热搜: ${word}`);
           return false;
         }
         if (item.flag_desc && ["剧集", "电影", "综艺", "盛典", "演出"].includes(item.flag_desc.trim())) {
-          logger.debug(`过滤 default 分类热搜: ${word}`);
           return false;
         }
         if (lifeWordHistoryStore.hasWord(word) || entmtWordHistoryStore.hasWord(word)) {
-          logger.debug(`过滤 default 娱乐生活热搜: ${word}`);
           return false;
         }
         if (pluginSettingsStore.matchKeyword(word) || pluginSettingsStore.matchKeyword(item.word_scheme)) {
-          logger.debug(`过滤 default 关键词命中: ${word}`);
           return false;
         }
         if (pluginSettingsStore.matchName(word) || pluginSettingsStore.matchName(item.word_scheme)) {
-          logger.debug(`过滤 default 人名命中: ${word}`);
           return false;
         }
         return true;
@@ -1763,23 +1756,18 @@ function useWindowSize(options = {}) {
           return true;
         }
         if (item.small_icon_desc === "商" || item.rank === null) {
-          logger.debug(`过滤 mine 广告热搜: ${word}`);
           return false;
         }
         if (item.icon_desc && ["官宣", "亮相"].includes(item.icon_desc.trim())) {
-          logger.debug(`过滤 mine 分类热搜: ${word}`);
           return false;
         }
         if (lifeWordHistoryStore.hasWord(word) || entmtWordHistoryStore.hasWord(word)) {
-          logger.debug(`过滤 mine 娱乐生活热搜: ${word}`);
           return false;
         }
         if (pluginSettingsStore.matchKeyword(word) || pluginSettingsStore.matchKeyword(item.word_scheme)) {
-          logger.debug(`过滤 mine 关键词命中: ${word}`);
           return false;
         }
         if (pluginSettingsStore.matchName(word) || pluginSettingsStore.matchName(item.word_scheme)) {
-          logger.debug(`过滤 mine 人名命中: ${word}`);
           return false;
         }
         return true;
