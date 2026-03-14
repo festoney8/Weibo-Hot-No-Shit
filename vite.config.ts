@@ -25,8 +25,8 @@ export default defineConfig({
       userscript: {
         name: 'Weibo-Hot-No-Shit',
         namespace: 'http://tampermonkey.net/',
-        version: '0.1.0',
-        description: 'Remove shit from weibo hotsearch sidebar',
+        version: '1.0.0',
+        description: '净化微博热搜边栏',
         author: 'festoney8',
         homepage: 'https://github.com/festoney8/Weibo-Hot-No-Shit',
         supportURL: 'https://github.com/festoney8/Weibo-Hot-No-Shit',
