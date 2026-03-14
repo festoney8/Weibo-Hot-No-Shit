@@ -15,6 +15,8 @@ export const logger = {
     console.info(PROJECT_NAME, time() + 'ms', ...args)
   },
   debug(...args: any[]) {
-    console.debug(PROJECT_NAME, time() + 'ms', ...args)
+    if (import.meta.env.DEV) {
+      console.debug(PROJECT_NAME, time() + 'ms', ...args)
+    }
   },
 }
