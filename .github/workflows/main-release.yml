@@ -13,14 +13,21 @@ jobs:
     steps:
       # environment
       - name: checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
-      - name: install node and pnpm
+        uses: actions/checkout@v6
+      - name: setup pnpm
         uses: pnpm/action-setup@v4
-      - run: pnpm install
+        with:
+          version: 10
+      - name: setup node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - name: install dependencies
+        run: pnpm install --frozen-lockfile
 
-      # build and save
+      # build
       - name: build and save file
         run: |
           pnpm run build
@@ -54,7 +61,7 @@ jobs:
 
       # commit to release branch
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: release
           path: branch-release
