@@ -1,0 +1,73 @@
+name: main-release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      # environment
+      - name: checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - name: install node and pnpm
+        uses: pnpm/action-setup@v4
+      - run: pnpm install
+
+      # build and save
+      - name: build and save file
+        run: |
+          pnpm run build
+          rm -rf release && mkdir release
+          cp dist/weibo-hot-no-shit.user.js release/
+
+      # multi version, change metadata
+      - name: jsdelivr, github, greasyfork version
+        run: |
+          cd release
+
+          cp weibo-hot-no-shit.user.js weibo-hot-no-shit.jsdelivr.user.js
+          sed -i '/^\/\/ @downloadURL/ c\// @downloadURL  https://cdn.jsdelivr.net/gh/festoney8/weibo-hot-no-shit@release/weibo-hot-no-shit.jsdelivr.user.js' weibo-hot-no-shit.jsdelivr.user.js
+          sed -i '/^\/\/ @updateURL/ c\// @updateURL    https://cdn.jsdelivr.net/gh/festoney8/weibo-hot-no-shit@release/weibo-hot-no-shit.jsdelivr.user.js' weibo-hot-no-shit.jsdelivr.user.js
+
+          cp weibo-hot-no-shit.user.js weibo-hot-no-shit.github.user.js
+          sed -i '/^\/\/ @downloadURL/ c\// @downloadURL  https://raw.githubusercontent.com/festoney8/weibo-hot-no-shit/release/weibo-hot-no-shit.github.user.js' weibo-hot-no-shit.github.user.js
+          sed -i '/^\/\/ @updateURL/ c\// @updateURL    https://raw.githubusercontent.com/festoney8/weibo-hot-no-shit/release/weibo-hot-no-shit.github.user.js' weibo-hot-no-shit.github.user.js
+
+          mv weibo-hot-no-shit.user.js weibo-hot-no-shit.greasyfork.user.js
+          cd ..
+
+      - name: release action
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: 'release/*.js'
+          allowUpdates: true
+          replacesArtifacts: true
+          generateReleaseNotes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # commit to release branch
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          ref: release
+          path: branch-release
+
+      - name: commit and push
+        run: |
+          cd branch-release
+          rm -f *.user.js
+          cp -R ../release/* ./
+          ls -lah
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git status
+          git commit -m "CI: release ${{ github.ref_name }}"
+          git push
