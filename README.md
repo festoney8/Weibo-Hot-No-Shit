@@ -1,1 +1,0 @@
-# Weibo-Hot-No-Shit
