@@ -47,8 +47,8 @@ export default defineConfig({
           '*://weibo.com/hot/social*',
         ],
         connect: ['weibo.com'],
-        downloadURL: '',
-        updateURL: '',
+        downloadURL: 'https://update.greasyfork.org/scripts/569576/Weibo-Hot-No-Shit.user.js',
+        updateURL: 'https://update.greasyfork.org/scripts/569576/Weibo-Hot-No-Shit.meta.js',
         'run-at': 'document-start',
       },
       build: {
