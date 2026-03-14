@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     Vue(),
     AutoImport({
-      imports: [util.unimportPreset, 'vue', 'vue-router', 'pinia'],
+      imports: [util.unimportPreset, 'vue', 'pinia'],
       dts: 'src/types/auto-imports.d.ts',
       eslintrc: {
         enabled: true,
@@ -23,7 +23,7 @@ export default defineConfig({
     monkey({
       entry: 'src/main.ts',
       userscript: {
-        name: 'Weibo-Hot-No-Shit',
+        name: '微博热搜净化 Weibo-Hot-No-Shit',
         namespace: 'http://tampermonkey.net/',
         version: '1.0.0',
         description: '净化微博热搜边栏，去除闲杂内容，支持关键词过滤',

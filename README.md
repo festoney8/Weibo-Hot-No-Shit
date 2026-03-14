@@ -1,4 +1,12 @@
-# 微博热搜边栏净化 (Weibo-Hot-No-Shit)
+# 微博热搜净化：Weibo-Hot-No-Shit
+
+## 安装
+
+| **更新源**   | **链接**                                                                                                           | **介绍**               |
+| ------------ | ------------------------------------------------------------------------------------------------------------------ | ---------------------- |
+| Greasyfork   | [前往 Greasyfork 安装](https://greasyfork.org/zh-CN/scripts/569576)                                                | 稳定版                 |
+| Github       | [点击安装](https://raw.githubusercontent.com/festoney8/weibo-hot-no-shit/release/weibo-hot-no-shit.github.user.js) | 测试版                 |
+| JSDelivr CDN | [点击安装](https://cdn.jsdelivr.net/gh/festoney8/weibo-hot-no-shit@release/weibo-hot-no-shit.jsdelivr.user.js)     | 测试版，解决连接性问题 |
 
 ## 功能
 
