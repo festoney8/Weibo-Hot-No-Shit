@@ -26,7 +26,7 @@ export default defineConfig({
         name: 'Weibo-Hot-No-Shit',
         namespace: 'http://tampermonkey.net/',
         version: '1.0.0',
-        description: '净化微博热搜边栏',
+        description: '净化微博热搜边栏，去除闲杂内容，支持关键词过滤',
         author: 'festoney8',
         homepage: 'https://github.com/festoney8/Weibo-Hot-No-Shit',
         supportURL: 'https://github.com/festoney8/Weibo-Hot-No-Shit',
