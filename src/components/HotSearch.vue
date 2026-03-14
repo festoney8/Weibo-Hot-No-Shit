@@ -266,6 +266,40 @@ const closeSettingMenu = () => {
 </template>
 
 <style lang="scss" scoped>
+html[data-theme='light'] .hot-sidebar,
+html:not([data-theme]) .hot-sidebar {
+  --hot-color-bg: #fff;
+  --hot-color-border: #eceef2;
+  --hot-color-title: #1f2d3d;
+  --hot-color-text: #1f2d3d;
+  --hot-color-desc: #8b97a6;
+  --hot-color-muted: #9aa4b2;
+  --hot-color-icon: #939393;
+  --hot-color-tab-bg: #f3f4f6;
+  --hot-color-tab-active-bg: #fff;
+  --hot-color-tab-text: #8c98a7;
+  --hot-color-tab-active-text: #1f2d3d;
+  --hot-color-rank: #ff8200;
+  --hot-color-rank-top3: #f26d5f;
+  --hot-color-scrollbar-thumb: rgba(148, 163, 184, 0.3);
+}
+html[data-theme='dark'] .hot-sidebar {
+  --hot-color-bg: #111318;
+  --hot-color-border: #222833;
+  --hot-color-title: #d2d6dd;
+  --hot-color-text: #bfbfbf;
+  --hot-color-desc: #aaaaaa;
+  --hot-color-muted: #7d838d;
+  --hot-color-icon: #7a808a;
+  --hot-color-tab-bg: #0a0d12;
+  --hot-color-tab-active-bg: #161b23;
+  --hot-color-tab-text: #858b95;
+  --hot-color-tab-active-text: #d5dae2;
+  --hot-color-rank: #ff9800;
+  --hot-color-rank-top3: #ff6c5f;
+  --hot-color-scrollbar-thumb: rgba(126, 132, 143, 0.38);
+}
+
 body:has([state='noside']) aside {
   display: none;
 }
@@ -275,19 +309,6 @@ aside {
   left: calc(50vw + 274px);
 }
 .hot-sidebar {
-  --hot-color-bg: #fff;
-  --hot-color-border: #eceef2;
-  --hot-color-title: #1f2d3d;
-  --hot-color-text: #1f2d3d;
-  --hot-color-desc: #8b97a6;
-  --hot-color-muted: #9aa4b2;
-  --hot-color-tab-bg: #f3f4f6;
-  --hot-color-tab-active-bg: #fff;
-  --hot-color-tab-text: #8c98a7;
-  --hot-color-tab-active-text: #1f2d3d;
-  --hot-color-rank: #ff8200;
-  --hot-color-rank-top3: #f26d5f;
-
   width: 290px;
   height: calc(100vh - 85px);
   display: flex;
@@ -327,7 +348,7 @@ aside {
   padding: 4px;
   border: none;
   background: transparent;
-  color: #939393;
+  color: var(--hot-color-icon);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.16s ease;
@@ -366,7 +387,7 @@ aside {
   height: 14px;
   font-size: 14px;
   animation: spin-click 0.45s linear;
-  color: #939393;
+  color: var(--hot-color-icon);
 
   &.is-spinning {
     animation: spin 0.9s linear infinite;
@@ -414,7 +435,7 @@ aside {
   min-height: 0;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(148, 163, 184, 0.3) transparent;
+  scrollbar-color: var(--hot-color-scrollbar-thumb) transparent;
 
   &::-webkit-scrollbar {
     width: 3px;
@@ -425,7 +446,7 @@ aside {
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(148, 163, 184, 0.3);
+    background: var(--hot-color-scrollbar-thumb);
     border-radius: 999px;
   }
 }
