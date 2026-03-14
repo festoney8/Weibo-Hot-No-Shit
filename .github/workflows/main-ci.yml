@@ -1,0 +1,31 @@
+name: main-ci
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  main-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: env
+        uses: pnpm/action-setup@v4
+
+      - name: install
+        run: pnpm install
+
+      - name: build
+        run: pnpm run build
+
+      - name: upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weibo-hot-no-shit
+          path: dist/*
