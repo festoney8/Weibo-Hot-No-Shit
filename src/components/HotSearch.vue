@@ -482,6 +482,7 @@ aside {
   color: var(--hot-color-rank);
   font-variant-numeric: tabular-nums;
   font-family: var(--vc-font-family);
+  user-select: none;
 
   &.is-top3 {
     font-weight: 700;
@@ -524,6 +525,7 @@ aside {
   line-height: 1.2;
   color: var(--hot-color-desc);
   white-space: nowrap;
+  user-select: none;
 }
 
 .setting-menu-dialog {
