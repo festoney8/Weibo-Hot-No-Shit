@@ -62,6 +62,8 @@ export const useFilteredMineHotSearch = () => {
           desc = '登顶'
         } else if (item.description.endsWith('霸榜')) {
           desc = '霸榜'
+        } else if (item.description.endsWith('爆词')) {
+          desc = '爆词'
         } else {
           desc = item.description
         }
