@@ -1,4 +1,4 @@
-# 微博热搜净化：Weibo-Hot-No-Shit
+# 微博热搜净化 Weibo-Hot-No-Shit
 
 ## 安装
 
@@ -21,3 +21,13 @@
 ## 对比图
 
 ![](https://p.sda1.dev/31/5dd30e38c78929f85607fcddbfb0d5e3/clipboard-image-1773461415.png)
+
+## 其他
+
+- 热搜常见娱乐明星列表 [entmt.txt](./script/entmt.txt)，统计数据 [entmt.csv](./script/entmt.csv)
+- 热搜常见体育明星列表 [sport.txt](./script/sport.txt)，统计数据 [sport.csv](./script/sport.csv)
+- 以上数据来自 [justjavac/weibo-trending-hot-search](https://github.com/justjavac/weibo-trending-hot-search)，使用 NER 处理和 AI 筛选得到，可能包含错误内容，使用需谨慎
+
+## 鸣谢
+
+- [justjavac/weibo-trending-hot-search](https://github.com/justjavac/weibo-trending-hot-search)
