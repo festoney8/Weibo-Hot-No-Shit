@@ -44,6 +44,7 @@ export default defineConfig({
           '*://weibo.com/hot/entertainment*',
           '*://weibo.com/hot/life*',
           '*://weibo.com/hot/social*',
+          '*://weibo.com/p/*',
           '*://www.weibo.com/ttarticle/*',
           '*://www.weibo.com/tv',
           '*://www.weibo.com/tv/*',
@@ -53,6 +54,7 @@ export default defineConfig({
           '*://www.weibo.com/hot/entertainment*',
           '*://www.weibo.com/hot/life*',
           '*://www.weibo.com/hot/social*',
+          '*://www.weibo.com/p/*',
         ],
         connect: ['weibo.com'],
         downloadURL:
