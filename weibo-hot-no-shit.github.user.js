@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         微博热搜净化 Weibo-Hot-No-Shit
 // @namespace    http://tampermonkey.net/
-// @version      1.0.2
+// @version      1.0.3
 // @author       festoney8
 // @description  净化微博热搜边栏，去除闲杂内容，支持关键词过滤
 // @license      MIT
@@ -23,6 +23,7 @@
 // @exclude      *://weibo.com/hot/entertainment*
 // @exclude      *://weibo.com/hot/life*
 // @exclude      *://weibo.com/hot/social*
+// @exclude      *://weibo.com/p/*
 // @exclude      *://www.weibo.com/ttarticle/*
 // @exclude      *://www.weibo.com/tv
 // @exclude      *://www.weibo.com/tv/*
@@ -32,6 +33,7 @@
 // @exclude      *://www.weibo.com/hot/entertainment*
 // @exclude      *://www.weibo.com/hot/life*
 // @exclude      *://www.weibo.com/hot/social*
+// @exclude      *://www.weibo.com/p/*
 // @require      https://registry.npmmirror.com/vue/3.5.30/files/dist/vue.global.prod.js
 // @connect      weibo.com
 // @grant        GM_addStyle
@@ -1793,6 +1795,8 @@ function useWindowSize(options = {}) {
             desc = "登顶";
           } else if (item.description.endsWith("霸榜")) {
             desc = "霸榜";
+          } else if (item.description.endsWith("爆词")) {
+            desc = "爆词";
           } else {
             desc = item.description;
           }
